@@ -1,0 +1,2 @@
+import type { Experience } from "@/types/portfolio";
+export const experience: Experience[] = [{ period: "JAN 2023 — MAY 2023", title: "IT Support Intern", company: "Saint Mary’s Angels College of Valenzuela · Valenzuela City", desc: "Maintained and troubleshot laboratory computers, installed and configured routers and network connections, and created and repaired Ethernet cables to support network installations and resolve connectivity issues.", stack: ["Hardware Troubleshooting", "Network Configuration", "Ethernet Cabling"] }];

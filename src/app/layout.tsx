@@ -1,4 +1,8 @@
-import { Sidebar } from "./components/layout/Sidebar";
+import "./globals.css";
+import { PortfolioLayout } from "@/components/layout/PortfolioLayout";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Christian P. Guillermo | Portfolio", description: "Computer Science Student & Software Developer" };
 
 export default function RootLayout({
   children,
@@ -7,14 +11,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Sidebar />
-        <MobileNav />
-
-        <main>{children}</main>
-
-        <Footer />
-      </body>
+      <body><PortfolioLayout>{children}</PortfolioLayout></body>
     </html>
   );
 }

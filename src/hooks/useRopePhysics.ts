@@ -1,0 +1,23 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import { clampEndpoint, createRope, ropeEnergy, ropePath, ROPE_SEGMENT_LENGTH, stepRope, type RopePoint } from "@/lib/ropePhysics";
+
+type Sample = RopePoint & { time: number };
+const anchor = { x: 530, y: 164 };
+const restEndpoint = { x: anchor.x, y: anchor.y + ROPE_SEGMENT_LENGTH * 11 };
+
+export function useRopePhysics(onThreshold: () => void) {
+  const particles = useRef(createRope(anchor)); const endpoint = useRef<RopePoint | null>(null); const samples = useRef<Sample[]>([]); const frame = useRef<number | null>(null); const active = useRef(false); const triggered = useRef(false); const idleFrames = useRef(0); const alternateTap = useRef(1);
+  const pathRef = useRef<SVGPathElement>(null); const shadowRef = useRef<SVGPathElement>(null); const hitPathRef = useRef<SVGPathElement>(null); const knobRef = useRef<SVGCircleElement>(null); const knobVisualRef = useRef<SVGCircleElement>(null); const [dragging, setDragging] = useState(false); const [reduced, setReduced] = useState(false);
+  const draw = useCallback(() => { const path = ropePath(particles.current); const last = particles.current.at(-1); if (!path || !last) return; pathRef.current?.setAttribute("d", path); shadowRef.current?.setAttribute("d", path); hitPathRef.current?.setAttribute("d", path); [knobRef.current, knobVisualRef.current].forEach((knob) => { knob?.setAttribute("cx", String(last.x)); knob?.setAttribute("cy", String(last.y)); }); }, []);
+  const startLoop = useCallback(() => { if (frame.current !== null) return; const tick = () => { stepRope(particles.current, anchor, endpoint.current, reduced); draw(); const energy = ropeEnergy(particles.current); idleFrames.current = !active.current && energy < .035 ? idleFrames.current + 1 : 0; if (idleFrames.current > 24) { frame.current = null; return; } frame.current = requestAnimationFrame(tick); }; frame.current = requestAnimationFrame(tick); }, [draw, reduced]);
+  useEffect(() => { const query = window.matchMedia("(prefers-reduced-motion: reduce)"); const change = () => setReduced(query.matches); change(); query.addEventListener("change", change); draw(); return () => { query.removeEventListener("change", change); if (frame.current) cancelAnimationFrame(frame.current); }; }, [draw]);
+  const toLocal = (event: PointerEvent<SVGElement>): RopePoint => { const svg = event.currentTarget.ownerSVGElement; if (!svg) return restEndpoint; const rect = svg.getBoundingClientRect(); return { x: ((event.clientX - rect.left) / rect.width) * 760, y: ((event.clientY - rect.top) / rect.height) * 520 }; };
+  const record = (point: RopePoint) => { samples.current = [...samples.current.slice(-2), { ...point, time: performance.now() }]; };
+  const down = (event: PointerEvent<SVGElement>) => { event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); active.current = true; const point = clampEndpoint(toLocal(event), restEndpoint, anchor); endpoint.current = point; record(point); setDragging(true); startLoop(); };
+  const move = (event: PointerEvent<SVGElement>) => { if (!active.current) return; const point = clampEndpoint(toLocal(event), restEndpoint, anchor); endpoint.current = point; record(point); if (point.y - restEndpoint.y >= 28 && !triggered.current) { triggered.current = true; onThreshold(); } };
+  const release = (event: PointerEvent<SVGElement>, cancelled = false) => { if (!active.current) return; if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); active.current = false; setDragging(false); const last = particles.current.at(-1)!; const history = samples.current; const first = history[0]; const recent = history.at(-1); if (!cancelled && first && recent) { const duration = Math.max(16, recent.time - first.time); let velocityX = ((recent.x - first.x) / duration) * 15; let velocityY = ((recent.y - first.y) / duration) * 15; if (history.length < 2 || Math.hypot(recent.x - first.x, recent.y - first.y) < 3) { velocityX = 2.4 * alternateTap.current; velocityY = .8; alternateTap.current *= -1; } last.previousX = last.x - Math.max(-7, Math.min(7, velocityX)); last.previousY = last.y - Math.max(-5, Math.min(5, velocityY)); } endpoint.current = null; samples.current = []; triggered.current = false; startLoop(); };
+  const keyboardToggle = () => { const last = particles.current.at(-1)!; last.previousX = last.x - 2.6 * alternateTap.current; last.previousY = last.y - 1.2; alternateTap.current *= -1; onThreshold(); startLoop(); };
+  return { pathRef, shadowRef, hitPathRef, knobRef, knobVisualRef, dragging, reduced, down, move, release, keyboardToggle };
+}

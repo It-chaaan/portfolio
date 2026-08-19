@@ -1,0 +1,5 @@
+"use client";
+import { useState } from "react";
+import { navigation } from "@/data/navigation";
+import { site } from "@/config/site";
+export function MobileHeader() { const [open, setOpen] = useState(false); return <><header className="sticky top-0 z-50 flex h-[52px] items-center justify-between border-b border-[var(--border)] bg-[var(--bg)]/85 px-5 backdrop-blur-md lg:hidden"><a href="#home" className="text-sm font-semibold tracking-[-.01em]">{site.name}</a><button onClick={() => setOpen((value) => !value)} aria-expanded={open} className="border-0 bg-transparent p-0 font-mono text-[10px] uppercase tracking-[.1em]">{open ? "Close" : "Menu"}</button></header>{open && <nav className="fixed inset-0 z-40 flex flex-col bg-[var(--bg)] px-8 pb-10 pt-20 lg:hidden" aria-label="Mobile navigation">{navigation.map((item) => <a key={item.id} href={`#${item.id}`} onClick={() => setOpen(false)} className="flex items-center gap-3 border-b border-[var(--border)] py-3.5"><span className="font-mono text-[10px] tracking-[.1em] text-[var(--text-faint)]">{item.num}</span><span className="text-lg font-medium tracking-[-.01em]">{item.label}</span></a>)}</nav>}</>; }

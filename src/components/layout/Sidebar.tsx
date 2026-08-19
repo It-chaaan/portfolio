@@ -1,94 +1,48 @@
 "use client";
 
-import {
-  Github,
-  Linkedin,
-  FileText,
-  ArrowUpRight,
-} from "lucide-react";
+import { navigation } from "@/data/navigation";
+import { siteConfig } from "@/config/site";
+import type { SectionId } from "@/types/portfolio";
 
-const navigation = [
-  { number: "01", label: "Home", href: "#home" },
-  { number: "02", label: "About", href: "#about" },
-  { number: "03", label: "Projects", href: "#projects" },
-  { number: "04", label: "Skills", href: "#skills" },
-  { number: "05", label: "Experience", href: "#experience" },
-  { number: "06", label: "Education", href: "#education" },
-  { number: "07", label: "Contact", href: "#contact" },
-];
+export function Sidebar({ activeSection }: { activeSection: SectionId }) {
+  const activeIndex = Math.max(0, navigation.findIndex((item) => item.id === activeSection));
+  const activeItem = navigation[activeIndex];
+  const progress = `${String(activeIndex + 1).padStart(2, "0")} / ${String(navigation.length).padStart(2, "0")}`;
 
-const socialLinks = [
-  {
-    label: "GitHub",
-    href: "https://github.com/YOUR_USERNAME",
-    icon: Github,
-  },
-  {
-    label: "LinkedIn",
-    href: "https://linkedin.com/in/YOUR_USERNAME",
-    icon: Linkedin,
-  },
-  {
-    label: "Resume",
-    href: "/resume.pdf",
-    icon: FileText,
-  },
-];
-
-export function Sidebar() {
   return (
-    <aside className="fixed inset-y-0 left-0 hidden w-56 border-r border-[var(--border)] bg-[var(--background)] lg:flex lg:flex-col">
-      {/* Identity */}
-      <div className="border-b border-[var(--border)] px-6 py-6">
-        <a
-          href="#home"
-          className="text-sm font-semibold tracking-tight text-[var(--foreground)]"
-        >
-          YOUR NAME
+    <aside className="fixed inset-y-0 left-0 hidden h-dvh w-56 flex-col overflow-y-auto border-r border-[var(--border)] bg-[var(--bg)] px-6 py-7 lg:flex lg:py-10">
+      <div className="mb-7 shrink-0 lg:mb-10">
+        <a href="#home" className="text-sm font-semibold tracking-[-.01em]">
+          {siteConfig.shortName}
         </a>
-
-        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--muted)]">
-          CS Student / Developer
+        <p className="mt-1 font-mono text-[9px] uppercase tracking-[.1em] text-[var(--text-faint)]">
+          {siteConfig.role}
         </p>
       </div>
 
-      {/* Navigation */}
-      <nav
-        aria-label="Portfolio navigation"
-        className="flex-1 px-6 py-8"
-      >
-        <ul className="space-y-1">
+      <nav className="min-h-0 flex-1" aria-label="Portfolio navigation">
+        <ul>
           {navigation.map((item) => {
-            const isActive = item.href === "#home";
-
+            const active = item.id === activeSection;
             return (
-              <li key={item.href}>
+              <li key={item.id}>
                 <a
-                  href={item.href}
-                  className={[
-                    "group flex items-center gap-3 py-2",
-                    "font-mono text-[11px] uppercase tracking-[0.1em]",
-                    "transition-colors duration-200",
-                    isActive
-                      ? "text-[var(--foreground)]"
-                      : "text-[var(--muted)] hover:text-[var(--foreground)]",
-                  ].join(" ")}
+                  href={`#${item.id}`}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex items-center gap-2 py-[7px] font-mono text-[10px] uppercase tracking-[.1em] transition-colors ${
+                    active ? "text-[var(--text)]" : "text-[var(--text-faint)] hover:text-[var(--text)]"
+                  }`}
                 >
                   <span
-                    className={[
-                      "w-3 text-[var(--accent)]",
-                      isActive ? "opacity-100" : "opacity-0",
-                    ].join(" ")}
+                    className={`flex h-3 w-3 items-center justify-center text-[var(--accent)] ${
+                      active ? "opacity-100" : "opacity-0"
+                    }`}
                     aria-hidden="true"
                   >
-                    →
+                    ›
                   </span>
-
-                  <span className="text-[var(--faint)]">
-                    {item.number}
-                  </span>
-
-                  <span>{item.label}</span>
+                  <span className="mr-0.5 text-[var(--text-faint)]">{item.num}</span>
+                  {item.label}
                 </a>
               </li>
             );
@@ -96,54 +50,34 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      {/* Bottom content */}
-      <div className="border-t border-[var(--border)] px-6 py-6">
-        {/* Availability */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2">
-            <span
-              className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]"
-              aria-hidden="true"
-            />
-
-            <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--muted)]">
-              Available for opportunities
-            </span>
-          </div>
+      <div className="mt-5 shrink-0 border-t border-[var(--border)] pt-4 font-mono uppercase">
+        <div className="mb-4">
+          <p className="mt-2 text-[8px] tracking-[.1em] text-[var(--text-faint)]">
+            Expected graduation · {siteConfig.expectedGraduation}
+          </p>
         </div>
 
-        {/* Social links */}
-        <div className="space-y-2">
-          {socialLinks.map(({ label, href, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target={label === "Resume" ? "_blank" : "_blank"}
-              rel="noopener noreferrer"
-              className="group flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--muted)] transition-colors duration-200 hover:text-[var(--foreground)]"
-            >
-              <span className="flex items-center gap-2">
-                <Icon size={12} strokeWidth={1.5} />
-                {label}
-              </span>
-
-              <ArrowUpRight
-                size={11}
-                strokeWidth={1.5}
-                className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              />
-            </a>
-          ))}
-        </div>
-
-        {/* Theme control placeholder */}
-        <div className="mt-6 border-t border-[var(--border)] pt-5">
-          <button
-            type="button"
-            className="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
+        <div className="flex flex-col gap-2 text-[10px] tracking-[.08em]">
+          <a
+            href={`mailto:${siteConfig.email}`}
+            aria-label="Email Christian Guillermo"
+            className="w-fit text-[var(--text-muted)] transition-colors hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
           >
-            Theme bulb goes here
-          </button>
+            Email me ↗
+          </a>
+          <a
+            href={siteConfig.resumeUrl}
+            download
+            aria-label="Download Christian Guillermo CV"
+            className="w-fit text-[var(--text-faint)] transition-colors hover:text-[var(--text)] focus-visible:text-[var(--accent)]"
+          >
+            Download RESUME ↓
+          </a>
+        </div>
+
+        <div className="mt-4 border-t border-[var(--border)] pt-3 text-[9px] tracking-[.1em] text-[var(--text-faint)]">
+          <p aria-label={`Section ${progress}, ${activeItem.label}`}>{progress}</p>
+          <p className="mt-1 text-[var(--text-muted)]">{activeItem.label}</p>
         </div>
       </div>
     </aside>

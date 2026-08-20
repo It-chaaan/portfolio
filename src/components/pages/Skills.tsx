@@ -8,7 +8,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="border-t border-[var(--border)] py-20"
+      className="min-h-[100dvh] border-t border-[var(--border)] py-20"
     >
       {/* Section Header */}
       <Reveal>

@@ -9,6 +9,17 @@ export const projects: Project[] = [
     summary:
       "A Filipino-first personal finance application for managing expenses, income, bills, budgets, and savings goals across web and mobile clients that share an Express and Supabase backend.",
 
+    images: [
+      "/projects/alalay/alalay-1.png",
+      "/projects/alalay/alalay-2.png",
+      "/projects/alalay/alalay-3.png",
+    ],
+
+    links: {
+      web: "",
+      github: "",
+    },
+
     stack: [
       "React",
       "React Native",
@@ -41,6 +52,17 @@ export const projects: Project[] = [
     summary:
       "A mobile-first, offline-first Android educational math RPG for Grades 7–10. The team’s system combines bilingual learning flows with AI-assisted question phrasing and personalized feedback.",
 
+    images: [
+      "/projects/tako/tako-1.png",
+      "/projects/tako/tako-2.png",
+      "/projects/tako/tako-3.png",
+    ],
+
+    links: {
+      apk: "/downloads/tako.apk",
+      github: "",
+    },
+
     stack: [
       "Godot 4",
       "GDScript",
@@ -69,6 +91,17 @@ export const projects: Project[] = [
 
     summary:
       "A web-based thesis system for checking legal-document authenticity and integrity through SHA-256 hashing, ECDSA signatures, document management, role-based access control, and audit logging.",
+
+    images: [
+      "/projects/document-integrity/document-1.png",
+      "/projects/document-integrity/document-2.png",
+      "/projects/document-integrity/document-3.png",
+    ],
+
+    links: {
+      web: "",
+      github: "",
+    },
 
     stack: [
       "React",

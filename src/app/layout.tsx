@@ -2,8 +2,14 @@ import "./globals.css";
 import { PortfolioLayout } from "@/components/layout/PortfolioLayout";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Christian P. Guillermo | Portfolio", description: "Computer Science Student & Software Developer" };
-
+export const metadata: Metadata = {
+  title: "Christian P. Guillermo",
+  description: "Computer Science Student & Software Developer",
+  
+  icons: {
+    icon: "/profile.png",
+  },
+};
 export default function RootLayout({
   children,
 }: Readonly<{

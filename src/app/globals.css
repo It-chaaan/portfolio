@@ -313,6 +313,100 @@ svg {
   animation: pulse-dot 1.8s ease-in-out infinite;
 }
 
+.thesis-slide-enter-next,
+.thesis-slide-enter-previous {
+  animation-duration: 320ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+.project-slide-enter {
+  animation: project-slide-enter 240ms ease-out both;
+}
+
+@keyframes project-slide-enter {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.thesis-slide-enter-next {
+  animation-name: thesis-slide-enter-next;
+}
+
+.thesis-slide-enter-previous {
+  animation-name: thesis-slide-enter-previous;
+}
+
+.thesis-slide-exit-next,
+.thesis-slide-exit-previous {
+  animation-duration: 320ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
+}
+
+.thesis-slide-exit-next {
+  animation-name: thesis-slide-exit-next;
+}
+
+.thesis-slide-exit-previous {
+  animation-name: thesis-slide-exit-previous;
+}
+
+@keyframes thesis-slide-enter-next {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes thesis-slide-enter-previous {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes thesis-slide-exit-next {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes thesis-slide-exit-previous {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+
 
 /* =========================================================
    REDUCED MOTION

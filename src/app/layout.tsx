@@ -3,7 +3,7 @@ import { PortfolioLayout } from "@/components/layout/PortfolioLayout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Christian P. Guillermo",
+  title: "Christian Guillermo | Software Developer",
   description: "Computer Science Student & Software Developer",
   
   icons: {

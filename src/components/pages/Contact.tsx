@@ -22,7 +22,7 @@ export function Contact() {
   return (
     <section id="contact" className="border-t border-[var(--border)] py-20">
       <Reveal>
-        <SectionHeader num="07 — CONTACT" title="Let&apos;s build something." />
+        <SectionHeader num="06 — CONTACT" title="Let&apos;s build something." />
       </Reveal>
 
       <Reveal delay={70}>

@@ -1,4 +1,4 @@
-export type SectionId = "home" | "about" | "projects" | "skills" | "experience" | "education" | "contact";
+export type SectionId = "home" | "projects" | "skills" | "experience" | "education" | "contact";
 
 export type NavigationItem = { 
     id: SectionId; 
@@ -28,11 +28,17 @@ export type Project = {
   contribution: string;
   features: string[];
 
-  images?: string[];
+  images?: Array<string | ProjectImage>;
 
   links?: {
     web?: string;
     apk?: string;
     github?: string;
   };
+};
+
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  fit?: "cover" | "contain";
 };

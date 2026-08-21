@@ -13,7 +13,7 @@ export function Projects() {
       {/* Section Header */}
       <Reveal>
         <SectionHeader
-          num="03 — FEATURED PROJECTS"
+          num="02 — FEATURED PROJECTS"
           title="Things I&apos;ve built."
         />
 

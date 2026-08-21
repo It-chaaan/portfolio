@@ -13,7 +13,7 @@ export function Skills() {
       {/* Section Header */}
       <Reveal>
         <SectionHeader
-          num="04 — SKILLS"
+          num="03 — SKILLS"
           title="Tools I work with."
         />
       </Reveal>

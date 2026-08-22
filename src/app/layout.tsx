@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Computer Science Student & Software Developer",
   
   icons: {
-    icon: "/profile.jpg",
+    icon: "/profile.jpeg",
   },
 };
 

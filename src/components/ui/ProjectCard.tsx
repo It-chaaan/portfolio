@@ -1,9 +1,6 @@
-import type { ReactNode } from "react";
 import type { Project, ProjectImage } from "@/types/portfolio";
 import { Pill } from "./Pill";
-import { ThesisCarousel } from "./ThesisCarousel";
 import { ProjectCarousel } from "./ProjectCarousel";
-import { ShowcaseCarousel } from "./ShowcaseCarousel";
 
 export function ProjectCard({ project }: { project: Project }) {
   const isAlalayProject = project.num === "01";
@@ -36,7 +33,7 @@ function AlalayProjectLayout({ project }: { project: Project }) {
         </div>
 
         <div className="min-w-0 md:col-start-2 md:row-span-2 md:row-start-1">
-          <ShowcaseCarousel slides={galleryImages} label={`${project.name} project screenshots`} />
+          <ProjectCarousel images={galleryImages} projectName={project.name} autoAdvance />
         </div>
 
         <div className="space-y-5 md:col-start-1 md:row-start-2">
@@ -53,13 +50,7 @@ function AlalayProjectLayout({ project }: { project: Project }) {
 }
 
 function FeaturedProjectLayout({ project }: { project: Project }) {
-  const isTakoProject = project.num === "02";
-  const galleryImages = isTakoProject
-    ? project.images?.filter((image): image is ProjectImage => typeof image !== "string") ?? []
-    : [];
-  const carousel: ReactNode = isTakoProject
-    ? <ProjectCarousel images={galleryImages} projectName={project.name} />
-    : <ThesisCarousel />;
+  const galleryImages = project.images?.filter((image): image is ProjectImage => typeof image !== "string") ?? [];
 
   return (
     <>
@@ -78,7 +69,7 @@ function FeaturedProjectLayout({ project }: { project: Project }) {
         </div>
 
         <div className="min-w-0 md:col-start-2 md:row-span-2 md:row-start-1">
-          {carousel}
+          <ProjectCarousel images={galleryImages} projectName={project.name} />
         </div>
       </div>
 

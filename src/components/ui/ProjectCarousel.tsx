@@ -1,26 +1,57 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ProjectImage } from "@/types/portfolio";
 
 type ProjectCarouselProps = {
   images: ProjectImage[];
   projectName: string;
+  autoAdvance?: boolean;
 };
 
-export function ProjectCarousel({ images, projectName }: ProjectCarouselProps) {
+const AUTO_ADVANCE_DELAY = 5_000;
+
+export function ProjectCarousel({ images, projectName, autoAdvance = false }: ProjectCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const shouldLoop = autoAdvance;
   const activeImage = images[activeIndex];
-  const atStart = activeIndex === 0;
-  const atEnd = activeIndex === images.length - 1;
+  const atStart = !shouldLoop && activeIndex === 0;
+  const atEnd = !shouldLoop && activeIndex === images.length - 1;
 
   function selectImage(index: number) {
     setActiveIndex(index);
   }
 
+  const showPrevious = useCallback(() => {
+    setActiveIndex((index) => shouldLoop ? (index - 1 + images.length) % images.length : Math.max(0, index - 1));
+  }, [images.length, shouldLoop]);
+
+  const showNext = useCallback(() => {
+    setActiveIndex((index) => shouldLoop ? (index + 1) % images.length : Math.min(images.length - 1, index + 1));
+  }, [images.length, shouldLoop]);
+
+  useEffect(() => {
+    if (!autoAdvance || isHovered || isFocused) return;
+    const timer = window.setTimeout(showNext, AUTO_ADVANCE_DELAY);
+    return () => window.clearTimeout(timer);
+  }, [activeIndex, autoAdvance, isFocused, isHovered, showNext]);
+
+  if (images.length === 0) return null;
+
   return (
-    <section className="min-w-0" aria-label={`${projectName} gallery`}>
+    <section
+      className="min-w-0"
+      aria-label={`${projectName} gallery`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocusCapture={() => setIsFocused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsFocused(false);
+      }}
+    >
       <div className="relative overflow-hidden rounded-xl border border-[var(--border)]">
         <div className="relative aspect-[3/2]">
           <Image
@@ -29,24 +60,24 @@ export function ProjectCarousel({ images, projectName }: ProjectCarouselProps) {
             alt={activeImage.alt}
             fill
             sizes="(max-width: 767px) calc(100vw - 3rem), (max-width: 1023px) calc(100vw - 4rem), 58vw"
-            className={`project-slide-enter ${activeImage.fit === "contain" ? "object-contain p-5 sm:p-7" : "object-cover"}`}
+            className={`project-slide-enter ${activeImage.fit === "cover" ? "object-cover" : "object-contain"}`}
           />
         </div>
 
         <button
           type="button"
-          onClick={() => selectImage(activeIndex - 1)}
+          onClick={showPrevious}
           disabled={atStart}
-          aria-label="Previous TAKO image"
+          aria-label={`Previous ${projectName} image`}
           className="absolute bottom-3 left-3 z-10 flex size-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg)]/90 text-lg text-[var(--text)] shadow-sm transition hover:border-[var(--border-strong)] disabled:cursor-not-allowed disabled:opacity-35 sm:bottom-4 sm:left-4"
         >
           <span aria-hidden="true">‹</span>
         </button>
         <button
           type="button"
-          onClick={() => selectImage(activeIndex + 1)}
+          onClick={showNext}
           disabled={atEnd}
-          aria-label="Next TAKO image"
+          aria-label={`Next ${projectName} image`}
           className="absolute bottom-3 right-3 z-10 flex size-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--bg)]/90 text-lg text-[var(--text)] shadow-sm transition hover:border-[var(--border-strong)] disabled:cursor-not-allowed disabled:opacity-35 sm:bottom-4 sm:right-4"
         >
           <span aria-hidden="true">›</span>

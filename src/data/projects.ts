@@ -21,6 +21,7 @@ export const projects: Project[] = [
       {
         src: "/projects/alalay/ALALAY-AI.jpg",
         alt: "Alalay AI financial companion chat screen",
+        fit: "contain",
       },
     ],
 
@@ -62,7 +63,7 @@ export const projects: Project[] = [
       "A mobile-first, offline-first Android educational math RPG for Grades 7–10. The team’s system combines bilingual learning flows with AI-assisted question phrasing and personalized feedback.",
 
     images: [
-      { src: "/projects/tako/TAKO-LOBBY-cutout.png", alt: "TAKO game lobby screen in a phone mockup", fit: "contain" },
+      { src: "/projects/tako/TAKO-LOBBY.jpg", alt: "TAKO game lobby screen in a phone mockup", fit: "contain" },
       { src: "/projects/tako/TAKO-GAME.jpg", alt: "TAKO math game screen in a phone mockup", fit: "contain" },
       { src: "/projects/tako/TAKO-COMLAB.jpg", alt: "TAKO community lab screen in a phone mockup", fit: "contain" },
       { src: "/projects/tako/HACKATHON.jpg", alt: "TAKO team at the hackathon", fit: "cover" },
@@ -103,9 +104,9 @@ export const projects: Project[] = [
       "A web-based thesis system for checking legal-document authenticity and integrity through SHA-256 hashing, ECDSA signatures, document management, role-based access control, and audit logging.",
 
     images: [
-      "/projects/parity/home.png",
-      "/projects/parity/upload.jpg",
-      "/projects/parity/verify.jpg",
+      { src: "/projects/parity/home.png", alt: "Parity legal document integrity platform overview", fit: "contain" },
+      { src: "/projects/parity/upload.png", alt: "Parity document upload screen", fit: "contain" },
+      { src: "/projects/parity/verify.png", alt: "Parity document verification screen", fit: "contain" },
     ],
 
     links: {

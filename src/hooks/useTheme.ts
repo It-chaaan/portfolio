@@ -11,14 +11,20 @@ function applyTheme(theme: Theme, systemIsDark: boolean) {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "system";
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [systemIsDark, setSystemIsDark] = useState(false);
+
+  useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    return savedTheme === "light" || savedTheme === "dark" || savedTheme === "system" ? savedTheme : "system";
-  });
-  const [systemIsDark, setSystemIsDark] = useState(() =>
-    typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
+    const initialTheme: Theme = savedTheme === "light" || savedTheme === "dark" || savedTheme === "system" ? savedTheme : "system";
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    // Browser preferences are read after hydration so the server and first client render match.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setThemeState(initialTheme);
+    setSystemIsDark(mediaQuery.matches);
+    applyTheme(initialTheme, mediaQuery.matches);
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");

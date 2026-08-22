@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 import { Halftone } from "@/components/ui/Halftone";
 import { siteConfig } from "@/config/site";
 
@@ -13,54 +12,9 @@ const facts = [
 ];
 
 export function Hero() {
-  const [portraitOffset, setPortraitOffset] = useState({ x: 0, y: 0 });
-  const canUseParallax = useRef(false);
-  const frame = useRef<number | null>(null);
-  const pendingOffset = useRef({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const pointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updateCapability = () => {
-      canUseParallax.current = pointerQuery.matches && !motionQuery.matches;
-      if (!canUseParallax.current) setPortraitOffset({ x: 0, y: 0 });
-    };
-
-    updateCapability();
-    pointerQuery.addEventListener("change", updateCapability);
-    motionQuery.addEventListener("change", updateCapability);
-    return () => {
-      pointerQuery.removeEventListener("change", updateCapability);
-      motionQuery.removeEventListener("change", updateCapability);
-      if (frame.current !== null) window.cancelAnimationFrame(frame.current);
-    };
-  }, []);
-
-  function handlePointerMove(event: React.PointerEvent<HTMLElement>) {
-    if (!canUseParallax.current) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 14;
-    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 10;
-    pendingOffset.current = { x, y };
-
-    if (frame.current !== null) return;
-    frame.current = window.requestAnimationFrame(() => {
-      setPortraitOffset(pendingOffset.current);
-      frame.current = null;
-    });
-  }
-
-  function resetPortrait() {
-    if (!canUseParallax.current) return;
-    pendingOffset.current = { x: 0, y: 0 };
-    setPortraitOffset({ x: 0, y: 0 });
-  }
-
   return (
     <section
       id="home"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetPortrait}
       className="relative isolate grid min-h-[calc(100svh-52px)] overflow-hidden border-b border-[var(--border)] py-12 lg:min-h-dvh lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-8 lg:py-10"
     >
       <Halftone className="absolute inset-0 opacity-70" />
@@ -95,16 +49,48 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto mt-10 w-full max-w-[440px] animate-[fadeUp_.85s_180ms_ease_both] lg:mt-0 lg:max-w-none">
-        <div className="relative mx-auto aspect-[4/5] max-h-[420px] w-full max-w-[336px] overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--bg-secondary)] p-1 shadow-[0_10px_30px_rgba(0,0,0,.08)] sm:max-w-[380px] lg:max-w-[420px]">
+      <div className="relative z-10 mx-auto mt-10 w-full animate-[fadeUp_.85s_180ms_ease_both] lg:mt-0">
+        <div
+          className="
+            group
+            mx-auto
+            w-[320px]
+            cursor-pointer
+            overflow-hidden
+            rounded-[1.5rem]
+            border border-[var(--border)]
+            bg-[var(--bg-secondary)]
+            shadow-[0_8px_24px_rgba(0,0,0,.06)]
+
+            transition-all
+            duration-500
+            ease-out
+
+            hover:-translate-y-2
+            hover:scale-[1.025]
+            hover:border-[var(--border-strong)]
+            hover:shadow-[0_20px_50px_rgba(0,0,0,.18)]
+
+            sm:w-[360px]
+            lg:w-[420px]
+          "
+        >
           <Image
-            src="/profile.jpg"
+            src="/profile.png"
             alt={siteConfig.name}
-            fill
+            width={800}
+            height={1000}
             priority
-            sizes="(max-width: 1023px) min(80vw, 380px), min(32vw, 420px)"
-            className="object-cover object-top transition-transform duration-500 ease-out motion-reduce:transform-none"
-            style={{ transform: `translate3d(${portraitOffset.x}px, ${portraitOffset.y}px, 0) rotate(${portraitOffset.x * 0.06}deg)` }}
+            unoptimized
+            className="
+              block
+              h-auto
+              w-full
+              transition-transform
+              duration-700
+              ease-out
+              group-hover:scale-[1.03]
+            "
           />
         </div>
       </div>

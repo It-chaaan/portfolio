@@ -2,14 +2,44 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+export type Theme = "system" | "light" | "dark";
+
+const THEME_STORAGE_KEY = "theme";
+
+function applyTheme(theme: Theme, systemIsDark: boolean) {
+  document.documentElement.classList.toggle("dark", theme === "dark" || (theme === "system" && systemIsDark));
+}
+
 export function useTheme() {
-  const [dark, setDark] = useState(false);
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "system";
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    return savedTheme === "light" || savedTheme === "dark" || savedTheme === "system" ? savedTheme : "system";
+  });
+  const [systemIsDark, setSystemIsDark] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+
   useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    const isDark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const frame = window.requestAnimationFrame(() => setDark(isDark));
-    return () => window.cancelAnimationFrame(frame);
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    applyTheme(theme, mediaQuery.matches);
+
+    function handleSystemThemeChange(event: MediaQueryListEvent) {
+      setSystemIsDark(event.matches);
+    }
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    return () => mediaQuery.removeEventListener("change", handleSystemThemeChange);
+  }, [theme]);
+
+  useEffect(() => {
+    applyTheme(theme, systemIsDark);
+  }, [systemIsDark, theme]);
+
+  const setTheme = useCallback((nextTheme: Theme) => {
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    setThemeState(nextTheme);
   }, []);
-  useEffect(() => { document.documentElement.classList.toggle("dark", dark); localStorage.setItem("theme", dark ? "dark" : "light"); }, [dark]);
-  return { dark, toggleTheme: useCallback(() => setDark((value) => !value), []) };
+
+  return { theme, setTheme, dark: theme === "dark" || (theme === "system" && systemIsDark) };
 }

@@ -3,18 +3,52 @@ import type { Project, ProjectImage } from "@/types/portfolio";
 import { Pill } from "./Pill";
 import { ThesisCarousel } from "./ThesisCarousel";
 import { ProjectCarousel } from "./ProjectCarousel";
+import { ShowcaseCarousel } from "./ShowcaseCarousel";
 
 export function ProjectCard({ project }: { project: Project }) {
+  const isAlalayProject = project.num === "01";
   const isFeaturedProject = project.num === "02" || project.num === "03";
 
   return (
     <article className="rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)] p-6 shadow-[0_1px_4px_rgba(0,0,0,.04)] transition duration-300 hover:-translate-y-0.5 hover:border-[rgba(37,99,235,.2)] hover:shadow-[0_8px_32px_rgba(0,0,0,.08)] sm:p-8">
-      {isFeaturedProject ? (
+      {isAlalayProject ? (
+        <AlalayProjectLayout project={project} />
+      ) : isFeaturedProject ? (
         <FeaturedProjectLayout project={project} />
       ) : (
         <StandardProjectLayout project={project} />
       )}
     </article>
+  );
+}
+
+function AlalayProjectLayout({ project }: { project: Project }) {
+  const galleryImages = project.images?.filter((image): image is ProjectImage => typeof image !== "string") ?? [];
+
+  return (
+    <>
+      <div className="grid gap-7 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-x-8">
+        <div>
+          <p className="mb-1.5 font-mono text-[9px] uppercase tracking-[.12em] text-[var(--text-faint)]">Project / {project.num}</p>
+          <h3 className="text-xl font-semibold tracking-[-.02em]">{project.name}</h3>
+          <p className="mt-2 font-mono text-[9px] uppercase tracking-[.1em] text-[var(--accent)]">{project.context}</p>
+          <p className="mt-5 text-sm leading-[1.7] text-[var(--text-muted)]">{project.summary}</p>
+        </div>
+
+        <div className="min-w-0 md:col-start-2 md:row-span-2 md:row-start-1">
+          <ShowcaseCarousel slides={galleryImages} label={`${project.name} project screenshots`} />
+        </div>
+
+        <div className="space-y-5 md:col-start-1 md:row-start-2">
+          <DetailPills label="Technology" items={project.stack} />
+          <DetailPills label="Key Features" items={project.features} />
+        </div>
+      </div>
+
+      <div className="mt-7">
+        <Contribution contribution={project.contribution} />
+      </div>
+    </>
   );
 }
 

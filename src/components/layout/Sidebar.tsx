@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { navigation } from "@/data/navigation";
 import { siteConfig } from "@/config/site";
 import type { SectionId } from "@/types/portfolio";
+import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 
 export function Sidebar({ activeSection }: { activeSection: SectionId }) {
   const activeIndex = Math.max(0, navigation.findIndex((item) => item.id === activeSection));
@@ -12,9 +14,9 @@ export function Sidebar({ activeSection }: { activeSection: SectionId }) {
   return (
     <aside className="fixed inset-y-0 left-0 hidden h-dvh w-56 flex-col overflow-y-auto border-r border-[var(--border)] bg-[var(--bg)] px-6 py-7 lg:flex lg:py-10">
       <div className="mb-7 shrink-0 lg:mb-10">
-        <a href="#home" className="text-sm font-semibold tracking-[-.01em]">
+        <Link href="/" className="text-sm font-semibold tracking-[-.01em]">
           {siteConfig.shortName}
-        </a>
+        </Link>
         <p className="mt-1 font-mono text-[9px] uppercase tracking-[.1em] text-[var(--text-faint)]">
           {siteConfig.role}
         </p>
@@ -73,6 +75,10 @@ export function Sidebar({ activeSection }: { activeSection: SectionId }) {
           >
             Download RESUME ↓
           </a>
+        </div>
+
+        <div className="mt-4">
+          <ThemeSwitcher />
         </div>
 
         <div className="mt-4 border-t border-[var(--border)] pt-3 text-[9px] tracking-[.1em] text-[var(--text-faint)]">

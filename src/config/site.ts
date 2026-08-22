@@ -8,7 +8,9 @@ export const siteConfig = {
   linkedin: "https://www.linkedin.com/in/christian-guillermo-3821a838b",
   resumeUrl: "/resume.pdf",
   expectedGraduation: "2027",
-  availability: "Open to software development internships",
+  instagram: "https://www.instagram.com/it_chaaann/",
+  school: "FEU Institute of Technology",
+  major: "Software Engineering",
 } as const;
 
 // Compatibility alias for existing presentation components.

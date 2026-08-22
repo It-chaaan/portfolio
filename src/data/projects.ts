@@ -10,9 +10,18 @@ export const projects: Project[] = [
       "A Filipino-first personal finance application for managing expenses, income, bills, budgets, and savings goals across web and mobile clients that share an Express and Supabase backend.",
 
     images: [
-      "/projects/alalay/alalay-1.png",
-      "/projects/alalay/alalay-2.png",
-      "/projects/alalay/alalay-3.png",
+      {
+        src: "/projects/alalay/ALALAY-DASHBOARD.jpg",
+        alt: "Alalay mobile dashboard showing balance, wallets, and expense tools",
+      },
+      {
+        src: "/projects/alalay/ALALAY-OCR.jpg",
+        alt: "Alalay receipt review screen with extracted purchase details",
+      },
+      {
+        src: "/projects/alalay/ALALAY-AI.jpg",
+        alt: "Alalay AI financial companion chat screen",
+      },
     ],
 
     links: {
@@ -54,8 +63,8 @@ export const projects: Project[] = [
 
     images: [
       { src: "/projects/tako/TAKO-LOBBY-cutout.png", alt: "TAKO game lobby screen in a phone mockup", fit: "contain" },
-      { src: "/projects/tako/TAKO-GAME-cutout.png", alt: "TAKO math game screen in a phone mockup", fit: "contain" },
-      { src: "/projects/tako/TAKO-COMLAB-cutout.png", alt: "TAKO community lab screen in a phone mockup", fit: "contain" },
+      { src: "/projects/tako/TAKO-GAME.jpg", alt: "TAKO math game screen in a phone mockup", fit: "contain" },
+      { src: "/projects/tako/TAKO-COMLAB.jpg", alt: "TAKO community lab screen in a phone mockup", fit: "contain" },
       { src: "/projects/tako/HACKATHON.jpg", alt: "TAKO team at the hackathon", fit: "cover" },
     ],
 
